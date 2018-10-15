@@ -8,16 +8,11 @@ import (
 func main() {
 	r := gin.Default()
 
-	r.GET("/usr/:name", func(c *gin.Context) {
-		name := c.Param("name")
-		c.String(http.StatusOK, "Hello, %s", name)
-	})
+	r.GET("/welcome", func(c *gin.Context) {
+		firstname := c.DefaultQuery("firstname", "Guest")
+		lastname := c.Query("lastname")
 
-	r.GET("/usr/:name/*action", func(c *gin.Context) {
-		name := c.Param("name")
-		action := c.Param("action")
-		msg := name + " is " + action
-		c.String(http.StatusOK, msg)
+		c.String(http.StatusOK, "Hello, %s %s", firstname, lastname)
 	})
 
 	r.Run()
