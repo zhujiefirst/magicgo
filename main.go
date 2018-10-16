@@ -8,11 +8,15 @@ import (
 func main() {
 	r := gin.Default()
 
-	r.GET("/welcome", func(c *gin.Context) {
-		firstname := c.DefaultQuery("firstname", "Guest")
-		lastname := c.Query("lastname")
+	r.POST("/form_post", func(c *gin.Context) {
+		msg := c.PostForm("msg")
+		nick := c.DefaultPostForm("nick", "anonymous")
 
-		c.String(http.StatusOK, "Hello, %s %s", firstname, lastname)
+		c.JSON(http.StatusOK, gin.H{
+			"status": "posted",
+			"msg": msg,
+			"nick": nick,
+		})
 	})
 
 	r.Run()
