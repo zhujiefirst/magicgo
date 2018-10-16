@@ -1,23 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func main() {
 	r := gin.Default()
 
-	r.POST("/form_post", func(c *gin.Context) {
+	r.POST("/post", func(c *gin.Context) {
+		id := c.Query("id")
+		page := c.DefaultQuery("page", "0")
+		name := c.PostForm("name")
 		msg := c.PostForm("msg")
-		nick := c.DefaultPostForm("nick", "anonymous")
 
-		c.JSON(http.StatusOK, gin.H{
-			"status": "posted",
-			"msg": msg,
-			"nick": nick,
-		})
+		fmt.Printf("id: %s; page: %s; name: %s; message: %s\n", id, page, name, msg)
 	})
 
-	r.Run()
+	r.Run(":8081")
 }
