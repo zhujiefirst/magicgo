@@ -1,25 +1,26 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
 func main() {
 	r := gin.Default()
 
-	r.POST("/upload", func(c *gin.Context) {
-		form, _ := c.MultipartForm()
-		files := form.File["upload[]"]
+	v1 := r.Group("/v1")
+	{
+		v1.GET("read", func(c *gin.Context) {
+			c.String(http.StatusOK, "v1/read")
+		})
+	}
 
-		for _, file := range files {
-			log.Println(file.Filename)
-		}
+	v2 := r.Group("/v2")
+	{
+		v2.GET("read", func(c *gin.Context) {
+			c.String(http.StatusOK, "v2/read")
+		})
+	}
 
-		c.String(http.StatusOK, fmt.Sprintf("%d files uploaded!", len(files)))
-	})
-
-	r.Run(":8080")
+	r.Run()
 }
