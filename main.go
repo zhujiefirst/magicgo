@@ -5,22 +5,19 @@ import (
 	"net/http"
 )
 
+func RequestIdMiddleware(c *gin.Context) {
+	c.Writer.Header().Set("X-Request-Id", "This is RequestId")
+	c.Next()
+}
+
 func main() {
 	r := gin.Default()
 
-	v1 := r.Group("/v1")
-	{
-		v1.GET("read", func(c *gin.Context) {
-			c.String(http.StatusOK, "v1/read")
-		})
-	}
+	r.Use(RequestIdMiddleware)
 
-	v2 := r.Group("/v2")
-	{
-		v2.GET("read", func(c *gin.Context) {
-			c.String(http.StatusOK, "v2/read")
-		})
-	}
+	r.GET("/middleware", func(c *gin.Context) {
+		c.String(http.StatusOK, "")
+	})
 
 	r.Run()
 }
